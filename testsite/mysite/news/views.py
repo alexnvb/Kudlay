@@ -2,17 +2,20 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
 
 from .models import *
 from .forms import *
 
 # Create your views here.
 
+
 class HomeNews(ListView):
     model = News
     template_name = 'news/home_list.html'
     context_object_name = 'news'
     # extra_context = {'title': 'Main'}
+    paginate_by = 3
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
