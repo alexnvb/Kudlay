@@ -13,12 +13,10 @@
 <h1>Добавление Новости</h1>
 
 <form action="{% url 'add_news' %}" method="post">
-
     {% csrf_token %}
-
-
-
-
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Добавить</button>
+</form>
 
     {% comment %}
 
@@ -33,9 +31,6 @@
     </div>
     {% endfor %}
     <br>
-
-
-
 
     {{ form.non_field.errors }}
     <div class="mb-3">
@@ -70,15 +65,7 @@
       </div>
     </div>
 
-
     {% endcomment %}
-
-
-    {{ form.as_p }}
-
-
-    <button type="submit" class="btn btn-primary">Добавить</button>
-</form>
 
 {% endblock %}
 

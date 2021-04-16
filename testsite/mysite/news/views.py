@@ -3,11 +3,30 @@ from django.views.generic import ListView, DetailView, CreateView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
 
 from .models import *
 from .forms import *
 
 # Create your views here.
+
+
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Успех')
+            return redirect('login')
+        else:
+            messages.error(request, 'Ошибка')
+    else:
+        form = UserCreationForm()
+    return render(request, 'news/register.html', {"form": form})
+
+def login(request):
+    return render(request, 'news/login.html')
 
 
 class HomeNews(ListView):
@@ -30,6 +49,7 @@ class NewsByCategory(ListView):
     template_name = 'news/home_list.html'
     context_object_name = 'news'
     allow_empty = False
+    paginate_by = 3
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
