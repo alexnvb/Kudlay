@@ -14,7 +14,7 @@ from .forms import *
 
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = UserRegisterForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, 'Успех')
@@ -22,7 +22,7 @@ def register(request):
         else:
             messages.error(request, 'Ошибка')
     else:
-        form = UserCreationForm()
+        form = UserRegisterForm()
     return render(request, 'news/register.html', {"form": form})
 
 def login(request):
