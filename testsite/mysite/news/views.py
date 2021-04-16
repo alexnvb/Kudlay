@@ -5,28 +5,41 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
+from django.contrib.auth import login, logout
 
 from .models import *
 from .forms import *
 
 # Create your views here.
 
+def user_logout(request):
+    logout(request)
+    return (redirect('login'))
 
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            login(request, user)
             messages.success(request, 'Успех')
-            return redirect('login')
+            return redirect('home')
         else:
             messages.error(request, 'Ошибка')
     else:
         form = UserRegisterForm()
     return render(request, 'news/register.html', {"form": form})
 
-def login(request):
-    return render(request, 'news/login.html')
+def user_login(request):
+    if request.method == 'POST':
+        form = UserLoginForm(data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect('home')
+    else:
+        form = UserLoginForm()
+    return render(request, 'news/login.html', {"form": form})
 
 
 class HomeNews(ListView):
